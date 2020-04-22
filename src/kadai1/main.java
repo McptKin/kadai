@@ -18,7 +18,7 @@ public class main {
 		// TODO 自動生成されたメソッド・スタブ
 
 		//CSVファイル読み込み
-		String csv ="storage\\employee.csv";
+		String csv ="storage\\従業員情報.csv";
 		List<Employee> csvList = readCSV(csv);
 
 		System.out.println("読み込んだCSVを出力します");
@@ -82,7 +82,7 @@ public class main {
 	 */
 	private static void writeCSV(List<Employee> csvList){
 
-		String wr_csvPath = "storage\\wr_employee.csv";
+		String wr_csvPath = "storage\\対象従業員.csv";
 		File wr_csv = new File(wr_csvPath);
 		try {
 			//出力ファイルの作成
@@ -101,10 +101,14 @@ public class main {
 
 			//明細行書き込み
 			for(Employee emp : csvList){
-				//1行を一括で書き込む
-				String row = appendCSVText(emp);
-				pw.print(row);
-				pw.println();
+
+				//抽出条件：アルバイトはCSVに書き込まない
+				if(emp.getEmployee_kubn() != 700){
+					//1行を一括で書き込む
+					String row = appendCSVText(emp);
+					pw.print(row);
+					pw.println();
+				}
 			}
 
 			//書き出し終了
@@ -138,13 +142,7 @@ public class main {
 		sb.append((emp.getGender_code() == 1 ) ? "男性" :"女性" );
 		sb.append(",");
 		//社員コード
-		if(emp.getEmployee_kubn() == 100){
-			sb.append("役員");
-		}else if(emp.getEmployee_kubn() == 300){
-			sb.append("正社員");
-		}else{
-			sb.append("アルバイト");
-		}
+		sb.append((emp.getEmployee_kubn() == 100 ) ? "役員" :"正社員");
 
 		//一行の文字列に変換
 		rowText = sb.toString();
